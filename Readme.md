@@ -34,7 +34,7 @@ be stored in your PyTorch cache directory, while the path for
 the image directory can be found in the `config.py` file. 
 
 ```bash
-python app/prepare_images.py
+python app/prepare_images.py 
 python app/prepare_models.py
 ```
 
@@ -47,5 +47,10 @@ To run the code without containers, it is sufficient to run
 separately the server,
 
 ```bash
-uvicorn main:app --reload
+uvicorn main:app --reload 
+
+#WINDOWS
+python3 -m uvicorn main:app
+
+#Per testare se tutto funziona (browser quials. 127.0.0.1:8000 oppure 'localhost:8000')
 ```
