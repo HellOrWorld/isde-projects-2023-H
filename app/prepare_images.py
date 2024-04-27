@@ -32,7 +32,7 @@ def prepare_images():
 
 
 def prepare_labels():
-    """Saves a JSON file containing Imagenet labels as a list where
+    """Saves a JSON file containing Imagenet labels as a list where)
     the index is the label ID of the class."""
     img_folder = Configuration().image_folder_path
     labels_path = os.path.join(img_folder, "imagenet_labels.json")

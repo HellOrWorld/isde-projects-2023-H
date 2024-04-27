@@ -11,6 +11,7 @@ from app.config import Configuration
 from app.forms.classification_form import ClassificationForm
 from app.ml.classification_utils import classify_image
 from app.utils import list_images
+from app.forms.histogram_form import HistogramForm
 
 
 app = FastAPI()
@@ -30,6 +31,7 @@ def info() -> Dict[str, List[str]]:
     return data
 
 
+
 @app.get("/", response_class=HTMLResponse)
 def home(request: Request):
     """The home page of the service."""
@@ -41,6 +43,13 @@ def create_classify(request: Request):
     return templates.TemplateResponse(
         "classification_select.html",
         {"request": request, "images": list_images(), "models": Configuration.models},
+    )
+
+
+@app.get("/histogram")
+def create_histogram(request: Request):
+    return templates.TemplateResponse(
+        "histogram_select.html", {"request": request, "images": list_images(), "models": Configuration.models}
     )
 
 
@@ -59,3 +68,20 @@ async def request_classification(request: Request):
             "classification_scores": json.dumps(classification_scores),
         },
     )
+
+@app.post("/histogram")
+async def request_histogram(request: Request):
+    form = HistogramForm(request)
+    await form.load_data()
+    image_id = form.image_id
+    model_id = form.model_id
+    return templates.TemplateResponse(
+        "histogram_output.html",
+        {
+            "request": request,
+            "image_id": image_id,
+            "model_id": model_id,
+        },
+    )
+
+    
