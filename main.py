@@ -10,6 +10,7 @@ from rq.job import Job
 from app.config import Configuration
 from app.forms.classification_form import ClassificationForm
 from app.ml.classification_utils import classify_image
+from app.ml.histogram_utils import calculate_histogram, plot_histogram # type: ignore
 from app.utils import list_images
 from app.forms.histogram_form import HistogramForm
 
@@ -75,6 +76,11 @@ async def request_histogram(request: Request):
     await form.load_data()
     image_id = form.image_id
     model_id = form.model_id
+
+    # Calculate histogram
+    r_hist, g_hist, b_hist = calculate_histogram(image_id)
+    histogram_image = plot_histogram(r_hist, g_hist, b_hist)
+
     return templates.TemplateResponse(
         "histogram_output.html",
         {

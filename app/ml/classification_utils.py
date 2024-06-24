@@ -83,5 +83,3 @@ def classify_image(model_id, img_id):
 
     img.close()
     return output
-
-def plot_histogram(model_id, img_id):
