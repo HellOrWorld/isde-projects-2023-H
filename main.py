@@ -1,25 +1,32 @@
+import base64
+from io import BytesIO
+import io
 import json
 from typing import Dict, List
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, HTTPException, Request, Form
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-import redis
-from rq import Connection, Queue
-from rq.job import Job
+import os
+import cv2
+from uuid import uuid4
+import matplotlib.pyplot as plt
+from matplotlib.figure import Figure
 from app.config import Configuration
 from app.forms.classification_form import ClassificationForm
+from app.forms.histogram_form import HistogramForm
 from app.ml.classification_utils import classify_image
 from app.ml.histogram_utils import calculate_histogram, plot_histogram # type: ignore
 from app.utils import list_images
-from app.forms.histogram_form import HistogramForm
+
 
 
 app = FastAPI()
 config = Configuration()
 
-app.mount("/static", StaticFiles(directory="app/static"), name="static")
 templates = Jinja2Templates(directory="app/templates")
+
+os.makedirs("app/static/histograms", exist_ok = True)
 
 
 @app.get("/info")
@@ -50,7 +57,7 @@ def create_classify(request: Request):
 @app.get("/histogram")
 def create_histogram(request: Request):
     return templates.TemplateResponse(
-        "histogram_select.html", {"request": request, "images": list_images(), "models": Configuration.models}
+        "histogram_select.html", {"request": request, "images": list_images()}
     )
 
 
@@ -70,24 +77,31 @@ async def request_classification(request: Request):
         },
     )
 
-@app.post("/histogram")
-async def request_histogram(request: Request):
-    form = HistogramForm(request)
-    await form.load_data()
-    image_id = form.image_id
-    model_id = form.model_id
+@app.get("/histogram", response_class=HTMLResponse)
+async def get_histogram_form(request: Request):
+    images = os.listdir('static/imagenet_subset')
+    return templates.TemplateResponse("histogram_select.html", {
+        "request": request,
+        "images": images
+    })
 
-    # Calculate histogram
-    r_hist, g_hist, b_hist = calculate_histogram(image_id)
-    histogram_image = plot_histogram(r_hist, g_hist, b_hist)
-
-    return templates.TemplateResponse(
-        "histogram_output.html",
-        {
-            "request": request,
-            "image_id": image_id,
-            "model_id": model_id,
-        },
-    )
-
+@app.post("/histogram", response_class=HTMLResponse)
+async def request_histogram(request: Request, image_id: str = Form(...)):
+    # Supprimez les caractères indésirables du chemin d'accès à l'image
+    image_id = image_id.strip()
+    img_path = os.path.join('static', 'imagenet_subset', image_id)
+    print(f"Debug: Image path - {img_path}")
     
+    hist = calculate_histogram(img_path)
+    hist_image = plot_histogram(hist)
+    
+    return templates.TemplateResponse("histogram_output.html", {
+        "request": request,
+        "image_id": image_id,
+        "histogram_image": hist_image
+    })
+
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8000)
