@@ -16,7 +16,7 @@
         <div class="col">
             <div class="card">
                 <img class="large-front-thumbnail"
-                     src="{{ 'static/imagenet_subset/'+image_id }} "
+                     src="/app/static/imagenet_subset/{{ image_id }}"
                      alt={{ image_id }}/>
             </div>
         </div>
@@ -30,6 +30,8 @@
                     </div>
                 </div>
                 <a class="btn btn-primary" href="/classifications" role="button">Back</a>
+                <a type="submit" class="btn btn-primary" role="button" download="plot.png" onclick="downloadGraph()"> Download Plot </a>
+                <a type="submit" class="btn btn-primary" role="button" download="classification_scores.json" href="/classifications_scores"> Download Results </a>
         </div>
     </div>
     <script src="{{ "static/graph.js" }}" id="makeGraph" classification_scores="{{classification_scores}}"></script>

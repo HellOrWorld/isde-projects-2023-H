@@ -1,18 +1,11 @@
-
-
 $(document).ready(function () {
     var scripts = document.getElementById('makeGraph');
-    var classification_scores = scripts.getAttribute('classification_scores');
-    makeGraph(classification_scores);
+    var selected_image = scripts.getAttribute('img');
+    console.log(selected_image);
+    makeGraph(selected_image);
 });
 
 
-function downloadGraph() {
-
-    var downloadLink = document.querySelector('a[download="plot.png"]');
-    var canvas = document.getElementById('classificationOutput');
-    downloadLink.href = canvas.toDataURL('image/png');
-}
 
 
 function makeGraph(results) {

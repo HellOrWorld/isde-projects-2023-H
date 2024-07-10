@@ -21,6 +21,7 @@ def fetch_image(image_id):
     downloaded in the folder specified in the configuration object."""
     image_path = os.path.join(conf.image_folder_path, image_id)
     img = Image.open(image_path)
+
     return img
 
 
@@ -83,3 +84,4 @@ def classify_image(model_id, img_id):
 
     img.close()
     return output
+
