@@ -1,4 +1,5 @@
 import base64
+import os
 from io import BytesIO
 import io
 import json
@@ -10,6 +11,8 @@ from fastapi.templating import Jinja2Templates
 import redis
 from rq import Connection, Queue
 from rq.job import Job
+from starlette.responses import FileResponse
+
 from app.config import Configuration
 from app.forms.classification_form import ClassificationForm
 from app.forms.histogram_form import HistogramForm
@@ -22,10 +25,9 @@ from app.forms.histogram_form import HistogramForm
 app = FastAPI()
 config = Configuration()
 
-app.mount("/static", StaticFiles(directory="app/static"), name="static")
+app.mount("/app/static", StaticFiles(directory="app/static"), name="static")
 templates = Jinja2Templates(directory="app/templates")
 
-os.makedirs("app/static/histograms", exist_ok = True)
 
 
 @app.get("/info")
@@ -94,7 +96,7 @@ async def get_histogram_form(request: Request):
     })
 
 @app.post("/histogram", response_class=HTMLResponse)
-async def request_histogram(request: Request, image_id: str = Form(...)):
+async def request_histogram(request: Request, image_id: str=None ):
     # Supprimez les caractères indésirables du chemin d'accès à l'image
     image_id = image_id.strip()
     img_path = os.path.join('static', 'imagenet_subset', image_id)
