@@ -6,7 +6,7 @@
         .large-front-thumbnail {
             position: relative;
             max-width: 100%;
-            height: auto;
+            height: 100%;
             display: block;
             margin: 0 auto;
         }
@@ -16,21 +16,25 @@
         <div class="col">
             <div class="card">
                 <img class="large-front-thumbnail"
-                     src="{{ 'static/imagenet_subset/'+image_id }} "
+                     src="/app/static/imagenet_subset/{{image_id}}"
                      alt={{ image_id }}/>
             </div>
         </div>
         <div class="col">
             <div class="card">
                 <div class="row">
-                    <canvas id="histogramOutput" style="width: 50%; margin: auto; padding: 20px;"></canvas>
+                    <canvas id="histogramOutput" width="800" height="600" style=" margin: auto; padding: 20px;"></canvas>
+
                     <div class="align-items-center">
                         <h2 id="waitText"></h2>
                         </div>
                     </div>
                 </div>
                 <a class="btn btn-primary" href="/histogram" role="button">Back</a>
+                <a type="submit" class="btn btn-primary" role="button" download="histogram_plot.png" onclick="downloadHisto()"> Download Histogram Plot </a>
+                <a type="submit" class="btn btn-primary" role="button" download="histogram_scores.txt" href="/histogram_scores"> Download Histogram Results </a>
         </div>
     </div>
-    <script src="{{ "static/graph.js" }}" id="makeGraph" ></script>
+    <script src="{{ "app/static/histograph.js"}}" id="Histogram_Graph" histogram_scores="{{histogram_scores}}"></script>
+
 {% endblock %}
