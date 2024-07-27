@@ -1,6 +1,9 @@
 from typing import List
 from fastapi import Request
 
+#Here is the declaration of the HistogramForm class. This class is quite similar to the ClassificationForm class,
+# but it has only one field, image_id, and no model_id field because an image histogram is not dependent on any machine
+# learning model.
 
 class HistogramForm:
     def __init__(self, request: Request):

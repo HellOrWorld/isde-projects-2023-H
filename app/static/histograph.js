@@ -12,25 +12,32 @@ $(document).ready(function () {
         console.error("Canvas element with ID 'HistogramOutput' not found.");
         return; // Exit the function if canvas is not found
     }
-
     Histogram_Graph(histogram_scores);
+
 });
 
 function downloadHisto() {
 
+    // This function is used to download the histogram graph as a PNG image
     var downloadLink = document.querySelector('a[download="histogram_plot.png"]');
-    var canvas = document.getElementById('HistogramOutput');
+    var HistogramChart = document.getElementById('histogramOutput');
     downloadLink.href = HistogramChart.toDataURL('image/png');
-}
+};
+
 
 function Histogram_Graph(histogram_scores) {
+    // Retrieving the element histogramOutput from the HTML file
     var ctx = document.getElementById("histogramOutput").getContext('2d');
+
+    // Creating a new histogram chart
     var HistogramChart = new Chart(ctx, {
         type: 'bar',
         data: {
             labels: Array.from({ length: 256 }, (_, i) => i),
+            //Creating the datasets for the histogram chart
             datasets: [
                 {
+                    // Red color
                     label: 'Red',
                     data: histogram_scores.red,
                     backgroundColor: 'rgb(211,6,52)',
@@ -38,6 +45,7 @@ function Histogram_Graph(histogram_scores) {
                     borderWidth: 2
                 },
                 {
+                    // Green color
                     label: 'Green',
                     data: histogram_scores.green,
                     backgroundColor: 'rgba(28,129,6,0.91)',
@@ -45,6 +53,7 @@ function Histogram_Graph(histogram_scores) {
                     borderWidth: 2
                 },
                 {
+                    // Blue color
                     label: 'Blue',
                     data: histogram_scores.blue,
                     backgroundColor: 'rgba(9,90,143,0.97)',
@@ -53,6 +62,7 @@ function Histogram_Graph(histogram_scores) {
                 }
             ]
         },
+        // Options for the histogram chart (Starts at 0 on both axes)
         options: {
             scales: {
                 x: {
@@ -65,5 +75,6 @@ function Histogram_Graph(histogram_scores) {
         }
     });
     console.log("Histogram Graph loaded");
+    // Check if the canvas has been correctly loaded
 }
 

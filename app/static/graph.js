@@ -1,14 +1,18 @@
 
 
 $(document).ready(function () {
+    // This part of the code is used to get the classification scores from the HTML script tag
+    // and pass it to the makeGraph function
     var scripts = document.getElementById('makeGraph');
     var classification_scores = scripts.getAttribute('classification_scores');
     makeGraph(classification_scores);
+    // This part of the code is to execute the makeGraph function when the page is loaded
 });
 
 
 function downloadGraph() {
 
+    // This function is used to download the classification graph as a PNG image
     var downloadLink = document.querySelector('a[download="plot.png"]');
     var canvas = document.getElementById('classificationOutput');
     downloadLink.href = canvas.toDataURL('image/png');
