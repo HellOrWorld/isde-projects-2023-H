@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <!-- This is the style for the image thumbnail which is similar to the image classifcation one -->
+    <style>
+        .large-front-thumbnail {
+            position: relative;
+            max-width: 100%;
+            height: 100%;
+            display: block;
+            margin: 0 auto;
+        }
+
+    </style>
+    <div class="row">
+        <div class="col">
+            <div class="card">
+                <img class="large-front-thumbnail"
+                     src="/app/static/imagenet_subset/{{image_id}}"
+                     alt={{ image_id }}/>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card">
+                <div class="row">
+                    <!-- This is the canvas for the histogram output -->
+                    <canvas id="histogramOutput" width="800" height="600" style=" margin: auto; padding: 20px;"></canvas>
+
+                    <div class="align-items-center">
+                        <h2 id="waitText"></h2>
+                        </div>
+                    </div>
+                </div>
+                <a class="btn btn-primary" href="/histogram" role="button">Back</a>
+                <!-- This is the button to download the Histogram Plot into a png -->
+                <a type="submit" class="btn btn-primary" role="button" download="histogram_plot.png" onclick="downloadHisto()"> Download Histogram Plot </a>
+                <!-- This is the button to download the Histogram Scores into a txt file -->
+                <a type="submit" class="btn btn-primary" role="button" download="histogram_scores.txt" href="/histogram_scores_txt"> Download Histogram Results as .txt </a>
+
+        </div>
+    </div>
+    <!-- This is the script for the histogram graph -->
+    <script src="{{ "app/static/histograph.js"}}" id="Histogram_Graph" histogram_scores="{{histogram_scores}}"></script>
+
+{% endblock %}

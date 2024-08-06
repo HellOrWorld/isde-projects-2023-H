@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <style>
+        .large-front-thumbnail {
+            position: relative;
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+
+    </style>
+    <div class="row">
+        <div class="col">
+            <div class="card">
+                <img class="large-front-thumbnail"
+                     src="/app/static/imagenet_subset/{{ image_id }}"
+                     alt={{ image_id }}/>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card">
+                <div class="row">
+                    <canvas id="classificationOutput" style="width: 50%; margin: auto; padding: 20px;"></canvas>
+                    <div class="align-items-center">
+                        <h2 id="waitText"></h2>
+                        </div>
+                    </div>
+                </div>
+                <a class="btn btn-primary" href="/classifications" role="button">Back</a>
+            <!-- This is the button to download the Image Classification Graph into a png -->
+                <a type="submit" class="btn btn-primary" role="button" download="plot.png" onclick="downloadGraph()"> Download Plot </a>
+            <!-- This is the button to download the Image Classification Scores into a json file -->
+                <a type="submit" class="btn btn-primary" role="button" download="classification_scores.json" href="/classifications_scores"> Download Results </a>
+        </div>
+    </div>
+    <script src="{{ "app/static/graph.js" }}" id="makeGraph" classification_scores="{{classification_scores}}"></script>
+{% endblock %}
+
