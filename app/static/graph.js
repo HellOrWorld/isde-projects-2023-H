@@ -18,6 +18,28 @@ function downloadGraph() {
     downloadLink.href = canvas.toDataURL('image/png');
 }
 
+function downloadClassificationResults() {
+    // We take the classification scores from the script tag
+    var scripts = document.getElementById('makeGraph');
+    var classification_scores = scripts.getAttribute('classification_scores');
+
+    // Convert the classification scores to a string format
+    const dataStr = JSON.stringify(JSON.parse(classification_scores), null, 2);
+    const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
+
+    //Those lines create a temporary link element
+    const link = document.createElement('a');
+    link.setAttribute('href', dataUri);
+    link.setAttribute('download', 'classification_scores.json');
+    document.body.appendChild(link);
+
+    // This line will make it so as we click the link, it will trigger the download
+    link.click();
+
+    // Remove the link element from the document
+    document.body.removeChild(link);
+}
+
 
 function makeGraph(results) {
     console.log(results);

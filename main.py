@@ -60,10 +60,6 @@ async def request_classification(request: Request):
     # We classify the image using the model
     classification_scores = classify_image(model_id=model_id, img_id=image_id)
 
-    # We save the classification scores to the classification_scores.json file
-    with open('app/static/classification_scores.json', 'w') as f:
-        json.dump(classification_scores, f)
-
     # We return the classification_output.html template with the image_id and classification_scores
     return templates.TemplateResponse(
         "classification_output.html",
@@ -98,9 +94,6 @@ async def request_histogram(request: Request):
     # We calculate the histogram scores for the image
     histogram_scores = calculate_histogram(image_id)
 
-    # We save the histogram scores to the histogram_scores.txt file
-    with open('app/static/histogram_scores.txt', 'w') as f:
-        f.write(str(histogram_scores))
 
     # We return the histogram_output.html template with the image_id and histogram_scores
     return templates.TemplateResponse(
